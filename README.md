@@ -86,9 +86,8 @@ This command will:
     - At least 1 approving review
     - CI checks passed; run the following commands for verification:
         - `black .`
-        - `bandit .`
         - `mypy .` (not enforced)
-        > Install `black`, `bandit`, and `mypy` using pip
+        > Install `black`, and `mypy` using pip
 - All files and folders beside `.github/`, `README.md`, `AGENTS.md`, `.gitkeep`, `Dockerfile`, , `__init__.py`, and `.gitignore` must adhere to kebab-case.
 
 ### Branching rules
