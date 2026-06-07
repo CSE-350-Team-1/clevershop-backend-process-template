@@ -76,3 +76,19 @@ This command will:
 ### Environment Variables
 
 - `PORT`: The port on which the backend service will listen (default: 8000)
+
+## Repository rules
+
+### Update model
+- Pull requests must adhere to the following requirements before approval:
+    - At least 1 approving review
+    - CI checks passed; run the following commands for verification:
+        - `black .`
+        - `bandit .`
+        - `mypy .`
+        > Install `black`, `bandit`, and `mypy` using pip
+- All files and folders beside `.github/`, `README.md`, `AGENTS.md`, `.gitkeep`, `Dockerfile`, , `__init__.py`, and `.gitignore` must adhere to kebab-case. (not enforced)
+
+### Branching rules
+- The use of feature branches is mandatory.
+- All branches must have main as the origin.
