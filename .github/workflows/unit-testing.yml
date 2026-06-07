@@ -1,0 +1,48 @@
+name: Run Python tests if present
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test (only if tests exist)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies and run tests if test folder exists
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Detect test files in root/test
+          if [ -d "./test" ] && ls ./test/*.py >/dev/null 2>&1; then
+            echo "Test files detected in ./test — preparing to run tests."
+
+            # Install dependencies if requirements.txt exists, otherwise ensure pytest is available
+            if [ -f "requirements.txt" ]; then
+              echo "Installing dependencies from requirements.txt"
+              python -m pip install --upgrade pip
+              python -m pip install -r requirements.txt
+            else
+              echo "No requirements.txt found; installing pytest only"
+              python -m pip install --upgrade pip
+              python -m pip install pytest
+            fi
+
+            # Run pytest against the test directory
+            echo "Running pytest..."
+            pytest ./test -q
+          else
+            echo "No Python tests found in ./test — skipping test run."
+          fi
