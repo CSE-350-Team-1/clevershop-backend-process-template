@@ -11,6 +11,9 @@ jobs:
   test:
     name: Test (only if tests exist)
     runs-on: ubuntu-latest
+    env:
+      #We need to set PYTHONPATH to the root of the repository so that tests can import the application code correctly.
+      PYTHONPATH: ${{ github.workspace }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -25,8 +28,8 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Detect test files in root/test
-          if [ -d "./test" ] && ls ./test/*.py >/dev/null 2>&1; then
+          # Detect test files anywhere under ./test (recursive)
+          if [ -d "./test" ] && find ./test -type f -name "*.py" | grep -q .; then
             echo "Test files detected in ./test — preparing to run tests."
 
             # Install dependencies if requirements.txt exists, otherwise ensure pytest is available
@@ -37,7 +40,7 @@ jobs:
             else
               echo "No requirements.txt found; installing pytest only"
               python -m pip install --upgrade pip
-              python -m pip install pytest
+              python -m pip install pytest fastapi httpx
             fi
 
             # Run pytest against the test directory

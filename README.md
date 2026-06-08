@@ -91,3 +91,16 @@ This command will:
 ### Branching rules
 - The use of feature branches is mandatory.
 - All branches must have main as the origin.
+
+## Tests
+
+- Unit tests: `test/unit_tests/` — fast, isolated (run on PRs).
+- Integration tests: `test/integration_tests/` — middleware and cross-component checks (run separately).
+
+Run locally:
+```
+pytest test/unit_tests -q
+pytest -q -m integration  # run integration tests
+```
+
+CI: unit tests run by default; integration tests can be a separate job or run on schedule.
