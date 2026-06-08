@@ -3,6 +3,7 @@ from src.main import app
 from src.middleware import error_middleware as em
 import json
 
+
 def test_error_middleware_logs_and_returns_500(tmp_path):
     # Redirect log path to temporary file
     em.LOG_PATH = tmp_path / "error-log.jsonl"
