@@ -1,12 +1,12 @@
-name: Validate Docker Build
+name: Docker Build
 
 on:
-  pull_request:
   push:
-    branches: [main]
+    branches: [main, master]
+  pull_request:
 
 jobs:
-  build-check:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,9 +16,26 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build image (no run)
+      - name: Build Docker image
         run: |
-          docker build \
-            --file Dockerfile \
-            --tag temp-build-check \
-            .
+          docker build -t temp-build-check .
+
+      - name: Start container
+        run: |
+          docker run -d --name app-test temp-build-check
+
+      - name: Check container is still running
+        run: |
+          sleep 10
+          docker ps | grep app-test
+
+      - name: Show container logs
+        if: always()
+        run: |
+          docker logs app-test || true
+
+      - name: Stop and remove container
+        if: always()
+        run: |
+          docker stop app-test || true
+          docker rm app-test || true
