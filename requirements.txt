@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+requests
+httpx2
+pytest
+python-dotenv #Need this for environment vars.
+wp-api-client #We might not need this but if we want to connect wordpress, it is good probably.
